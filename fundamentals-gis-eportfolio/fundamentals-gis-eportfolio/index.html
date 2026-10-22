@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sonali Rajput — MSc Geoinformatics E-Portfolio for GEO 1102: Fundamentals of Geospatial Science and Technology. Features StoryMap visual narrative, Bavdhan field survey in ArcGIS Pro, coursework, and reflections.">
+  <meta name="author" content="Sonali Rajput">
+  <title>Sonali Rajput | Fundamentals of GIS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #081116;
+      --panel: #102127;
+      --panel-hover: #162c34;
+      --ink: #edf5f1;
+      --muted: #a8bfba;
+      --line: #2a454b;
+      --lime: #c5f36b;
+      --cyan: #70e0d1;
+      --radius: 12px;
+      --radius-sm: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 85px; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    .wrap { width: min(1140px, calc(100% - 36px)); margin: auto; }
+    .mono, .eyebrow, .tag, .navnum { font-family: "DM Mono", monospace; }
+    .eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--lime);
+    }
+    .muted { color: var(--muted); }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #081116f2;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    nav {
+      min-height: 68px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      position: relative;
+    }
+    .brand {
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .brand span { color: var(--lime); }
+    
+    .nav-toggle {
+      display: none;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      padding: 8px 12px;
+      font-family: "DM Mono", monospace;
+      font-size: 0.78rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .nav-toggle:hover { border-color: var(--lime); }
+
+    .links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+    }
+    .links a {
+      font-size: 0.84rem;
+      color: var(--muted);
+      transition: color 0.2s ease;
+      font-weight: 500;
+    }
+    .links a:hover { color: var(--lime); }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 42px;
+      align-items: center;
+      padding: 80px 0;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+      line-height: 1.06;
+      letter-spacing: -0.06em;
+      margin: 16px 0;
+      font-weight: 800;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--lime);
+    }
+    .lead {
+      font-size: 1.05rem;
+      color: #c2d3cf;
+      max-width: 620px;
+      line-height: 1.68;
+    }
+    .pills, .tags, .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+    .pill, .tag {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      padding: 6px 12px;
+      font-size: 0.74rem;
+      color: #d4e5df;
+      font-family: "DM Mono", monospace;
+    }
+    .btn {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 11px 18px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn.primary {
+      background: var(--lime);
+      color: #10190f;
+      border-color: var(--lime);
+    }
+    .btn.primary:hover {
+      background: #b6e65a;
+      transform: translateY(-1px);
+    }
+    .btn.secondary {
+      background: var(--panel);
+      color: var(--ink);
+    }
+    .btn.secondary:hover {
+      border-color: var(--lime);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Portrait Card */
+    .hero-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(145deg, #13272d, #0d1b20);
+      padding: 16px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.45);
+      max-width: 420px;
+      margin-left: auto;
+      transition: border-color 0.25s ease;
+    }
+    .hero-card:hover {
+      border-color: var(--lime);
+    }
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-family: "DM Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--cyan);
+      letter-spacing: 0.05em;
+    }
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--lime);
+      font-size: 0.7rem;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 8px var(--lime);
+    }
+    .hero-img-wrap {
+      aspect-ratio: 4 / 4.6;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #081216;
+      border: 1px solid rgba(197, 243, 107, 0.15);
+    }
+    .hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+    .hero-card:hover .hero-img {
+      transform: scale(1.02);
+    }
+    .hero-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(42, 69, 75, 0.6);
+    }
+    .hero-card-footer strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+    .hero-card-footer small {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* Sections Global */
+    section {
+      border-top: 1px solid #20373d;
+      padding: 85px 0;
+    }
+    .heading {
+      display: grid;
+      grid-template-columns: 0.35fr 1fr;
+      gap: 25px;
+      margin-bottom: 36px;
+    }
+    .navnum {
+      font-size: 0.78rem;
+      color: var(--lime);
+      padding-top: 10px;
+    }
+    .heading h2 {
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      line-height: 1.1;
+      letter-spacing: -0.05em;
+      margin: 7px 0 12px;
+      font-weight: 800;
+    }
+    .heading p {
+      color: var(--muted);
+      max-width: 780px;
+      margin: 0;
+    }
+
+    /* Coursework Grid */
+    .coursegrid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .course {
+      background: #0e1d22;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .course:hover {
+      border-color: var(--lime);
+      transform: translateY(-2px);
+    }
+    .course h3 {
+      font-size: 1rem;
+      margin: 8px 0;
+      line-height: 1.35;
+    }
+    .course p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* Cards */
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: linear-gradient(145deg, #13272d, #0d1b20);
+      padding: 26px;
+    }
+    .card h3 {
+      font-size: 1.18rem;
+      line-height: 1.35;
+      margin: 8px 0 12px;
+    }
+    .card p {
+      font-size: 0.92rem;
+      color: #bfd0cc;
+      margin-bottom: 12px;
+    }
+    .card p:last-child { margin-bottom: 0; }
+    .reflection {
+      border-left: 2px solid var(--lime);
+      padding-left: 17px;
+    }
+    .reflection strong { color: var(--ink); }
+    .project-link {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--lime);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+    .project-link:hover { text-decoration: underline; }
+
+    /* Evidence Galleries */
+    .evidence-grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .evidence-grid2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .evidence-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #0d1b20;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .evidence-card:hover {
+      border-color: var(--lime);
+      transform: translateY(-2px);
+    }
+    .evidence-thumb {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #091317;
+    }
+    .evidence-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.3s ease;
+    }
+    .evidence-card:hover .evidence-thumb img {
+      transform: scale(1.03);
+    }
+    .evidence-info {
+      padding: 14px 16px;
+    }
+    .evidence-info h4 {
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+    .evidence-info p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    /* Stats Grid */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 22px 0;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      padding: 16px;
+      border-radius: 8px;
+      background: #0d1b20;
+    }
+    .stat b {
+      display: block;
+      font-size: 1.65rem;
+      color: var(--lime);
+      line-height: 1.1;
+    }
+    .stat span {
+      font-size: 0.74rem;
+      color: var(--muted);
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* Notes & Closing */
+    .note {
+      border: 1px solid #455a3b;
+      background: #c5f36b0c;
+      border-radius: 8px;
+      padding: 17px 20px;
+      color: #dce8d2;
+      margin-top: 20px;
+      font-size: 0.88rem;
+    }
+    .closing {
+      border: 1px solid #3c5847;
+      background: linear-gradient(120deg, #c5f36b10, #70e0d108);
+      padding: 28px;
+      border-radius: 10px;
+      margin-top: 26px;
+    }
+    .closing h3 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+    .closing p {
+      color: #bfd0cc;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+    .closing p:last-child { margin-bottom: 0; }
+
+    /* Contact Grid */
+    .contactgrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .contact {
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 20px;
+      background: #0d1b20;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+      display: block;
+      word-break: break-all;
+    }
+    .contact small {
+      display: block;
+      font: 11px "DM Mono", monospace;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    .contact b {
+      font-size: 0.9rem;
+      color: var(--ink);
+    }
+    .contact:hover {
+      border-color: var(--lime);
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid #20373d;
+      padding: 26px 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(4, 9, 12, 0.94);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 82vh;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+      object-fit: contain;
+    }
+    .lightbox-caption {
+      margin-top: 14px;
+      color: #edf5f1;
+      font-size: 0.88rem;
+      font-family: "DM Mono", monospace;
+      text-align: center;
+      max-width: 800px;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 2rem;
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+    .lightbox-close:hover { color: var(--lime); }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 56px 0;
+        gap: 36px;
+      }
+      .hero-card {
+        margin: 0 auto;
+        max-width: 380px;
+        width: 100%;
+      }
+      .heading { grid-template-columns: 1fr; gap: 8px; }
+      .grid2, .evidence-grid2 { grid-template-columns: 1fr; }
+      .coursegrid { grid-template-columns: repeat(2, 1fr); }
+      .evidence-grid3 { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .contactgrid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-toggle { display: block; }
+      .links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: #081116fa;
+        border-bottom: 1px solid var(--line);
+        padding: 18px 24px;
+        gap: 14px;
+      }
+      .links.open { display: flex; }
+      .hero h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); }
+      section { padding: 60px 0; }
+    }
+
+    @media (max-width: 520px) {
+      .coursegrid { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
+      .hero-card { padding: 14px; max-width: 320px; }
+      .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .stat { padding: 12px; }
+      .stat b { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <nav class="wrap">
+      <a class="brand" href="#home">SR<span>.</span> / GEO 1102</a>
+      
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">MENU ☰</button>
+
+      <div class="links" id="navLinks">
+        <a href="#coursework">Coursework</a>
+        <a href="#storymap">StoryMap</a>
+        <a href="#survey">Field survey</a>
+        <a href="#reflections">Reflections</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="home">
+    <!-- Hero Section -->
+    <div class="wrap hero">
+      <div>
+        <div class="eyebrow">Fundamentals of Geospatial Science and Technology · GEO 1102</div>
+        <h1>Learning to see the world <em>spatially.</em></h1>
+        <p class="lead">
+          I’m Sonali Rajput, an MSc Geoinformatics student. This portfolio documents my learning through GIS concepts, field data collection, spatial interpretation and geographic storytelling.
+        </p>
+
+        <div class="pills">
+          <span class="pill">SONALI RAJPUT</span>
+          <span class="pill">ROLL NO. 2615120006</span>
+          <span class="pill">SEMESTER 1</span>
+        </div>
+
+        <div class="actions">
+          <a class="btn primary" href="#storymap">Explore assignments ↓</a>
+          <a class="btn secondary" href="#reflections">Read reflections</a>
+        </div>
+      </div>
+
+      <!-- Hero Visual: Sonali Rajput Portrait Card -->
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <span>SPATIAL NOTEBOOK / 01</span>
+          <span class="status-indicator">
+            <span class="status-dot"></span>
+            <span>MSc GEOINFORMATICS</span>
+          </span>
+        </div>
+        
+        <div class="hero-img-wrap">
+          <img src="assets/images/sona.jpeg" alt="Sonali Rajput — MSc Geoinformatics student" class="hero-img">
+        </div>
+
+        <div class="hero-card-footer">
+          <div>
+            <strong>Sonali Rajput</strong>
+            <small>Roll No. 2615120006 · Sem 1</small>
+          </div>
+          <span class="tag">GEO 1102</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 01 / COURSEWORK (8 Modules from Official Syllabus) -->
+    <section id="coursework">
+      <div class="wrap">
+        <div class="heading">
+          <div class="navnum">01 / COURSEWORK</div>
+          <div>
+            <div class="eyebrow">What I learned and practised</div>
+            <h2>Concepts became workflows.</h2>
+            <p>
+              The course connected the principles behind maps and spatial data with practical GIS operations. I practised these topics on the computer and applied the learning in assignments.
+            </p>
+          </div>
+        </div>
+
+        <div class="coursegrid">
+          <!-- 01 -->
+          <article class="course">
+            <div class="eyebrow">01 · Foundations (03h)</div>
+            <h3>Geospatial science & spatial thinking</h3>
+            <p>Concepts of geospatial science and technologies, spatial thinking principles, and applications to the Sustainable Development Goals (SDGs).</p>
+          </article>
+
+          <!-- 02 -->
+          <article class="course">
+            <div class="eyebrow">02 · Cartography (06h)</div>
+            <h3>Geographic data & map design</h3>
+            <p>Data measurement scales, sampling, cartographic history, map scale, symbols, graphic variables, typography, statistical mapping, and StoryMaps.</p>
+          </article>
+
+          <!-- 03 -->
+          <article class="course">
+            <div class="eyebrow">03 · Reference (06h)</div>
+            <h3>Geodesy, datums & projections</h3>
+            <p>Earth models (sphere, ellipsoid, geoid), plane vs geographic coordinates, geodetic datums, projection properties, distortion, and georeferencing.</p>
+          </article>
+
+          <!-- 04 -->
+          <article class="course">
+            <div class="eyebrow">04 · Data Models (06h)</div>
+            <h3>Raster, vector & databases</h3>
+            <p>Raster compression, vector primitives, topology and spatial relationships, data input, digitising errors, topology building, and geodatabases.</p>
+          </article>
+
+          <!-- 05 -->
+          <article class="course">
+            <div class="eyebrow">05 · Positioning (05h)</div>
+            <h3>GNSS fundamentals</h3>
+            <p>GNSS segments and constellations, signal structure, pseudorange, carrier phase, cycle slips, error sources, and field observation methods.</p>
+          </article>
+
+          <!-- 06 -->
+          <article class="course">
+            <div class="eyebrow">06 · Analysis (06h)</div>
+            <h3>Spatial analysis & geoprocessing</h3>
+            <p>Attribute and spatial queries, buffering, neighbourhood functions, map overlay operations, multicriteria evaluation, and network analysis.</p>
+          </article>
+
+          <!-- 07 -->
+          <article class="course">
+            <div class="eyebrow">07 · Applications (03h)</div>
+            <h3>Applications of geoinformatics</h3>
+            <p>Applications across forestry and wildlife, mining, urban planning, disaster risk reduction, public health epidemiology, and emerging cloud GIS trends.</p>
+          </article>
+
+          <!-- 08 -->
+          <article class="course">
+            <div class="eyebrow">08 · Management (01h)</div>
+            <h3>GIS project design</h3>
+            <p>Problem identification, spatial requirements, schema design, primary field data capture, spatial analysis execution, and QA/QC verification.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 / ASSIGNMENT 01: ArcGIS StoryMaps -->
+    <section id="storymap">
+      <div class="wrap">
+        <div class="heading">
+          <div class="navnum">02 / ASSIGNMENT 01</div>
+          <div>
+            <div class="eyebrow">ArcGIS StoryMaps · Visual storytelling</div>
+            <h2>India’s Living Tribal Heritage</h2>
+            <p>
+              Eight communities. Eight landscapes. One living heritage. The StoryMap explores connections between communities, their places, cultural identity, livelihoods and traditions.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <!-- Overview Card -->
+          <article class="card">
+            <div class="eyebrow">Project overview</div>
+            <h3>From locations to a connected narrative</h3>
+            <p>
+              I brought together eight communities—Bhotia, Apatani, Khasi, Warli, Toda, Gond, Santhal and Dongria Kondh—and used maps, imagery and short text to introduce their landscapes and cultural practices.
+            </p>
+            <p>
+              The project combined location mapping with visual storytelling. Instead of presenting the communities only as a list, I wanted readers to understand the relationship between people, place and living heritage across four broad geographical regions.
+            </p>
+            <div class="tags">
+              <span class="tag">ArcGIS StoryMaps</span>
+              <span class="tag">ArcGIS Online</span>
+              <span class="tag">Cartography</span>
+              <span class="tag">Visual narrative</span>
+            </div>
+            <a class="project-link" href="https://storymaps.arcgis.com/stories/8291ac39a89746539909d9c3ac767952" target="_blank" rel="noopener">
+              Open published StoryMap ↗
+            </a>
+          </article>
+
+          <!-- Reflection Card -->
+          <article class="card">
+            <div class="eyebrow">My reflection</div>
+            <div class="reflection">
+              <p>
+                <strong>At first, I struggled to turn my topic into a visual experience.</strong> Choosing the topic took time, and after settling on it, I could not make the StoryMap look the way I had imagined. Once I learned the interface by trying different tools and layouts, I started building the story—but then noticed that many slides were beginning to feel repetitive.
+              </p>
+              <p>
+                The real challenge was keeping the reader curious. I brainstormed alternatives, explored tutorials and examples, and used online guidance, including AI, to understand what I could change. Gradually, I experimented with map scales, imagery and section formats to make the narrative less predictable.
+              </p>
+              <p>
+                <strong>What I learned:</strong> an effective StoryMap needs editorial decisions as much as technical ones. Next time, I will sketch the story structure first, decide what each slide should achieve, and vary the format intentionally rather than designing each slide in isolation.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <!-- StoryMap Evidence Screenshots -->
+        <div class="evidence-grid3">
+          <div class="evidence-card" onclick="openLightbox('assets/images/storymap-overview-bhotia.png', 'Opening section and overview map showing tribal diversity and Bhotia in the Himalayas.')">
+            <div class="evidence-thumb">
+              <img src="assets/images/storymap-overview-bhotia.png" alt="Opening section and overview map">
+            </div>
+            <div class="evidence-info">
+              <h4>Opening Overview Map</h4>
+              <p>Introducing India’s tribal diversity and Himalayan Bhotia landscapes.</p>
+            </div>
+          </div>
+
+          <div class="evidence-card" onclick="openLightbox('assets/images/storymap-community-khasi.png', 'Khasi community location map in Meghalaya showing terrain and forests.')">
+            <div class="evidence-thumb">
+              <img src="assets/images/storymap-community-khasi.png" alt="Khasi community location map">
+            </div>
+            <div class="evidence-info">
+              <h4>Community Location Map</h4>
+              <p>Khasi cultural identity in the hills and sacred forests of Meghalaya.</p>
+            </div>
+          </div>
+
+          <div class="evidence-card" onclick="openLightbox('assets/images/storymap-warli-layout.png', 'Visual layout demonstration: Warli art, Tarpa rhythm and satellite terrain.')">
+            <div class="evidence-thumb">
+              <img src="assets/images/storymap-warli-layout.png" alt="Warli art and visual storytelling slide">
+            </div>
+            <div class="evidence-info">
+              <h4>Visual Storytelling Layout</h4>
+              <p>Editorial pacing combining folk art, cultural traditions and satellite imagery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 / ASSIGNMENT 02: Bavdhan School Survey -->
+    <section id="survey">
+      <div class="wrap">
+        <div class="heading">
+          <div class="navnum">03 / ASSIGNMENT 02</div>
+          <div>
+            <div class="eyebrow">Field survey · Map Your Own World</div>
+            <h2>School locations around Bavdhan</h2>
+            <p>
+              I carried out an individual field survey, collected school data around Bavdhan, and imported the observations into ArcGIS Pro to map locations and interpret spatial patterns.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <!-- Overview Card -->
+          <article class="card">
+            <div class="eyebrow">Fieldwork to GIS</div>
+            <h3>Collecting the points myself made the map feel real.</h3>
+            <p>
+              I used EpiCollect5 to collect school locations and attributes, exported the dataset and imported the points into ArcGIS Pro. The most satisfying moment was seeing the locations I had visited appear on the map: the effort on the ground had become spatial data I could inspect and interpret.
+            </p>
+            <p>
+              I interpreted the distribution I could see, while recognising that the result represented the schools I surveyed rather than a complete census of all schools in the area.
+            </p>
+            <div class="tags">
+              <span class="tag">EpiCollect5</span>
+              <span class="tag">Primary data</span>
+              <span class="tag">ArcGIS Pro</span>
+              <span class="tag">Point mapping</span>
+            </div>
+          </article>
+
+          <!-- Reflection Card -->
+          <article class="card">
+            <div class="eyebrow">My reflection</div>
+            <div class="reflection">
+              <p>
+                This was one of the most interesting assignments of the semester because I completed the field collection independently around Bavdhan. Successfully mapping the records and interpreting their spatial pattern made the fieldwork feel worthwhile.
+              </p>
+              <p>
+                I found more pre-primary schools than secondary and higher-secondary schools, with dense clusters of 3–4 preschools within 500 metres. This reflects the emerging urban pattern for working parents. In terms of grounds, while only 10 schools had open-air playgrounds, 8 of the others had indoor play areas complying with MSBSHSE norms.
+              </p>
+              <p>
+                At one municipal school, I faced difficulty taking photographs due to security reasons, which taught me the importance of field protocols. I also wanted to calculate each school’s distance from a nearby main road in ArcGIS Pro, but road connectivity issues prevented me from completing that part.
+              </p>
+              <p>
+                <strong>What I learned:</strong> a field survey is shaped by access, observation and sampling—not just by the initial research question. In future, I would plan coverage more systematically, check secondary sources for missing schools and test the road-distance workflow earlier.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats">
+          <div class="stat"><b>21</b><span>survey records</span></div>
+          <div class="stat"><b>18</b><span>private schools recorded</span></div>
+          <div class="stat"><b>3</b><span>government schools recorded</span></div>
+          <div class="stat"><b>10 / 10</b><span>playground available / unavailable</span></div>
+        </div>
+
+        <!-- Real Evidence Screenshots (Replacing Placeholders) -->
+        <div class="evidence-grid2">
+          <div class="evidence-card" onclick="openLightbox('assets/images/bavdhan-school-map.jpg', 'ArcGIS Pro Layout Map: How accessible is education... spatially? Mapping surveyed schools in Bavdhan.')">
+            <div class="evidence-thumb" style="aspect-ratio: 16 / 11;">
+              <img src="assets/images/bavdhan-school-map.jpg" alt="School locations surveyed in Bavdhan">
+            </div>
+            <div class="evidence-info">
+              <h4>ArcGIS Pro Map Layout</h4>
+              <p>Surveyed school points, graticules, scale and basemap in Bavdhan area.</p>
+            </div>
+          </div>
+
+          <div class="evidence-card" onclick="openLightbox('assets/images/bavdhan-attribute-table.png', 'ArcGIS Pro Attribute Table: School records, management, level, entrance access, and boundary condition.')">
+            <div class="evidence-thumb" style="aspect-ratio: 16 / 11;">
+              <img src="assets/images/bavdhan-attribute-table.png" alt="ArcGIS Pro attribute table with school records">
+            </div>
+            <div class="evidence-info">
+              <h4>Attribute Table</h4>
+              <p>Field attributes including management type, school level, entrance access, and coordinates.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          <strong>Limitation:</strong> survey records represent the sample collected, not every school in Bavdhan. Keep interpretation within what the data supports. Road-distance analysis was planned but could not be completed due to network connectivity issues.
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 / REFLECTIONS: Learning Notes -->
+    <section id="reflections">
+      <div class="wrap">
+        <div class="heading">
+          <div class="navnum">04 / REFLECTIONS</div>
+          <div>
+            <div class="eyebrow">Learning notes</div>
+            <h2>What practical work changed in my thinking.</h2>
+            <p>
+              GIS operations require decisions about data quality, representation and purpose. These reflections connect course concepts to how I approach real tasks.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <!-- Card 1 -->
+          <article class="card">
+            <div class="eyebrow">Maps are models</div>
+            <h3>Coordinate systems and projections</h3>
+            <p>
+              I had assumed a map is simply true to the ground and that area is area. In the lab, measuring area in GCS WGS84 returned square degrees, while reprojecting to Web Mercator inflated area away from the equator. Reprojecting to UTM Zone 43N showed me that every map projection is a deliberate model with mathematical trade-offs. I now check coordinate systems and projection properties before measuring or analysing anything.
+            </p>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card">
+            <div class="eyebrow">Data quality</div>
+            <h3>Topology, attributes and errors</h3>
+            <p>
+              A clean-looking map does not guarantee correct data. Geometry, attributes, metadata and digitising errors like overshoots and slivers affect analysis. Topological validation and error correction are essential analytical steps, not optional cosmetic cleanup.
+            </p>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="card">
+            <div class="eyebrow">Analysis before appearance</div>
+            <h3>Queries, buffers and overlay</h3>
+            <p>
+              Queries, buffering and overlay turn broad geographic questions into testable operations. Results depend on input data, distance and selection criteria, so I need to explain why I chose a tool, not only which tool I used.
+            </p>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="card">
+            <div class="eyebrow">Position has uncertainty</div>
+            <h3>GNSS and field observations</h3>
+            <p>
+              GNSS provides coordinates for field observations, but location measurements have possible errors and limitations like multipath and satellite geometry (PDOP) in urban corridors. This reinforced the importance of consistent attributes and checking whether each point represents the feature observed.
+            </p>
+          </article>
+        </div>
+
+        <!-- Closing Entry -->
+        <div class="closing">
+          <div class="eyebrow">05 / CLOSING ENTRY</div>
+          <h3>From making maps to asking better questions.</h3>
+          <p>
+            At the beginning of the course, I mainly thought of GIS as a way to put locations on a map and make the result clear. The two assignments changed that view. The StoryMap taught me that geographic communication needs structure, variety and a reader-focused narrative. The Bavdhan survey showed me that spatial data begins before opening GIS software—with a question, a sampling decision, a field form and limits on what I can observe.
+          </p>
+          <p>
+            I now see GIS as a chain of decisions: how data are collected, represented, checked, analysed and communicated. I want to plan workflows more carefully, document limitations honestly, and use maps not just to display information but to explain spatial patterns and why they matter.
+          </p>
+          <p>
+            <strong>My next step:</strong> practise road-distance analysis on the school dataset, plan StoryMap structures before building them, and document important workflow decisions as evidence of learning.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 / CONTACT -->
+    <section id="contact">
+      <div class="wrap">
+        <div class="heading">
+          <div class="navnum">06 / CONTACT</div>
+          <div>
+            <div class="eyebrow">Contact and work</div>
+            <h2>Connect through geospatial work.</h2>
+            <p>
+              For academic collaboration, geospatial projects, internships or discussion about GIS and mapping.
+            </p>
+          </div>
+        </div>
+
+        <div class="contactgrid">
+          <a class="contact" href="mailto:sona.rajput0403@gmail.com">
+            <small>EMAIL ↗</small>
+            <b>sona.rajput0403@gmail.com</b>
+          </a>
+          <a class="contact" href="https://github.com/sonali-geocloud" target="_blank" rel="noopener">
+            <small>GITHUB ↗</small>
+            <b>sonali-geocloud</b>
+          </a>
+          <a class="contact" href="https://www.linkedin.com/in/sonali-rajput-33852b421/" target="_blank" rel="noopener">
+            <small>LINKEDIN ↗</small>
+            <b>Sonali Rajput</b>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <span>© Sonali Rajput · Fundamentals of GIS E-Portfolio</span>
+      <a href="#home" style="color:var(--lime);text-decoration:none">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close image">×</button>
+    <img id="lightboxImg" src="" alt="Enlarged screenshot">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script>
+    // Responsive Navigation Toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+      });
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('open');
+        });
+      });
+    }
+
+    // Lightbox Controls
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+
+    function openLightbox(src, caption) {
+      lightboxImg.src = src;
+      lightboxCaption.textContent = caption;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(e) {
+      if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>
